@@ -1,0 +1,21 @@
+# Go
+backend/coverage.out
+backend/coverage.html
+backend/bin/
+backend/*.test
+
+# Node (frontend, viene después)
+frontend/node_modules/
+frontend/dist/
+
+# Editores
+.idea/
+.vscode/
+
+# Env
+.env
+.env.local
+*.env
+
+# OS
+.DS_Store
