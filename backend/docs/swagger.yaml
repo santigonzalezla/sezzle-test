@@ -1,0 +1,246 @@
+basePath: /
+definitions:
+  github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorBody:
+    properties:
+      error:
+        $ref: '#/definitions/github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorDetail'
+    type: object
+  github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorDetail:
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      path:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  internal_calculator.CalculateRequest:
+    properties:
+      a:
+        type: number
+      b:
+        type: number
+    type: object
+  internal_calculator.CalculateResponse:
+    properties:
+      a:
+        type: number
+      b:
+        type: number
+      operation:
+        $ref: '#/definitions/internal_calculator.Operation'
+      result:
+        type: number
+    type: object
+  internal_calculator.Operation:
+    enum:
+    - add
+    - subtract
+    - multiply
+    - divide
+    - power
+    - sqrt
+    - percentage
+    type: string
+    x-enum-varnames:
+    - OpAdd
+    - OpSubtract
+    - OpMultiply
+    - OpDivide
+    - OpPower
+    - OpSqrt
+    - OpPercentage
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API for a full-stack calculator. Exposes basic and advanced
+  title: Sezzle Calculator API
+  version: "1.0"
+paths:
+  /api/calculate/add:
+    post:
+      consumes:
+      - application/json
+      description: Returns a + b
+      parameters:
+      - description: Operands
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_calculator.CalculateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_calculator.CalculateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorBody'
+      summary: Add two numbers
+      tags:
+      - calculator
+  /api/calculate/divide:
+    post:
+      consumes:
+      - application/json
+      description: Returns a / b. Fails with 400 if b is 0.
+      parameters:
+      - description: Operands
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_calculator.CalculateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_calculator.CalculateResponse'
+        "400":
+          description: b must not be zero
+          schema:
+            $ref: '#/definitions/github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorBody'
+      summary: Divide two numbers
+      tags:
+      - calculator
+  /api/calculate/multiply:
+    post:
+      consumes:
+      - application/json
+      description: Returns a * b
+      parameters:
+      - description: Operands
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_calculator.CalculateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_calculator.CalculateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorBody'
+      summary: Multiply two numbers
+      tags:
+      - calculator
+  /api/calculate/percentage:
+    post:
+      consumes:
+      - application/json
+      description: Returns a percent of b (e.g. a=50, b=200 -> 100)
+      parameters:
+      - description: Operands
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_calculator.CalculateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_calculator.CalculateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorBody'
+      summary: Percentage
+      tags:
+      - calculator
+  /api/calculate/power:
+    post:
+      consumes:
+      - application/json
+      description: Returns a^b. Fails with 400 if the result is not finite.
+      parameters:
+      - description: Base (a) and exponent (b)
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_calculator.CalculateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_calculator.CalculateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorBody'
+      summary: Raise a to the power of b
+      tags:
+      - calculator
+  /api/calculate/sqrt:
+    post:
+      consumes:
+      - application/json
+      description: Returns sqrt(a). B is ignored. Fails with 400 if a is negative.
+      parameters:
+      - description: Only a is used
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_calculator.CalculateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_calculator.CalculateResponse'
+        "400":
+          description: a must not be negative
+          schema:
+            $ref: '#/definitions/github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorBody'
+      summary: Square root of a number
+      tags:
+      - calculator
+  /api/calculate/subtract:
+    post:
+      consumes:
+      - application/json
+      description: Returns a - b
+      parameters:
+      - description: Operands
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/internal_calculator.CalculateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/internal_calculator.CalculateResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/github_com_santigonzalezla_sezzle-calculator_internal_httpserver.ErrorBody'
+      summary: Subtract two numbers
+      tags:
+      - calculator
+schemes:
+- http
+swagger: "2.0"
