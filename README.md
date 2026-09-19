@@ -2,6 +2,8 @@
 
 Full-stack calculator: Go REST backend + React/Vite frontend. Operations: add, subtract, multiply, divide, power, square root, percentage.
 
+Full technical/API documentation (all endpoints, request/response schemas) is generated with Swagger and available at https://backend-production-d763.up.railway.app/docs/ (or `http://localhost:8080/docs/` when running locally).
+
 ## Structure
 
 ```
@@ -93,6 +95,24 @@ Available operations: `add` `subtract` `multiply` `divide` `power` `sqrt` `perce
 - `sqrt` only needs operand `a`; `b` is accepted but ignored.
 - No operator chaining without pressing `=` (e.g. `5 + 3 + 2 =` is not supported); pressing an operator after a result reuses that result as the next `a`.
 - `CORS_ORIGINS` is a comma-separated list of allowed origins.
+
+## Deploying to Railway
+
+Two services from the same GitHub repo, each built from its existing `Dockerfile`, each with its own public domain:
+
+**Backend**
+- Root Directory: `backend`
+- Public port: `8080`
+- Variables: `CORS_ORIGINS=https://<frontend-public-domain>`
+
+**Frontend**
+- Root Directory: `frontend`
+- Public port: `80` (nginx)
+- Build variable: `VITE_API_BASE_URL=https://<backend-public-domain>` — must be set as a **build-time** variable, since Vite bakes it into the JS bundle at build time, not at runtime.
+
+Order: deploy the backend first to get its domain, set it as `VITE_API_BASE_URL` on the frontend, then set the frontend's domain as `CORS_ORIGINS` on the backend. Every `git push` to `main` auto-redeploys both services.
+
+**Gotcha**: `CORS_ORIGINS` must match the frontend's origin exactly, including the scheme — `http://` vs `https://` is a different origin and silently breaks CORS (browser shows `Failed to fetch`; backend logs only show the failed `OPTIONS` preflight, never the real request).
 
 ## Live demo
 
