@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/santigonzalezla/sezzle-calculator/internal/calculator"
 	"github.com/santigonzalezla/sezzle-calculator/internal/config"
 	"github.com/santigonzalezla/sezzle-calculator/internal/httpserver"
@@ -19,6 +20,10 @@ import (
 // @BasePath /
 // @schemes http
 func main() {
+	if err := godotenv.Load(); err != nil {
+		slog.Warn("no .env file found, using existing environment variables")
+	}
+
 	cfg, err := config.Load()
 
 	if err != nil {
