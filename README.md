@@ -69,8 +69,13 @@ cd frontend && pnpm run test:coverage
 
 ```bash
 curl -X POST http://localhost:8080/api/calculate/add -d '{"a":2,"b":3}'
+# -> {"operation":"add","a":2,"b":3,"result":5}
+
 curl -X POST http://localhost:8080/api/calculate/divide -d '{"a":10,"b":0}'
+# -> {"error":{"code":"CALCULATION_ERROR","message":"division by zero","path":"/api/calculate/divide","timestamp":"..."}}
+
 curl -X POST http://localhost:8080/api/calculate/sqrt -d '{"a":9}'
+# -> {"operation":"sqrt","a":9,"b":0,"result":3}
 ```
 
 Available operations: `add` `subtract` `multiply` `divide` `power` `sqrt` `percentage`
@@ -82,3 +87,15 @@ Available operations: `add` `subtract` `multiply` `divide` `power` `sqrt` `perce
 - API docs generated with Swagger (`swaggo`) from code comments.
 - Standardized JSON error envelope (`{"error": {...}}`) across the API.
 - Frontend uses CSS Modules (no external styling libraries).
+
+## Assumptions
+
+- `sqrt` only needs operand `a`; `b` is accepted but ignored.
+- No operator chaining without pressing `=` (e.g. `5 + 3 + 2 =` is not supported); pressing an operator after a result reuses that result as the next `a`.
+- `CORS_ORIGINS` is a comma-separated list of allowed origins.
+
+## Live demo
+
+- Frontend: https://frontend-production-72be1.up.railway.app
+- Backend: https://backend-production-d763.up.railway.app
+- Swagger: https://backend-production-d763.up.railway.app/docs/
